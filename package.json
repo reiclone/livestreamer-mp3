@@ -1,0 +1,27 @@
+{
+  "name": "livestreamer-mp3",
+  "version": "0.1.0",
+  "description": "Livestreamer to mp3 transcoding server",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bakape/livestreamer-mp3.git"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "livestreamer",
+    "mp3"
+  ],
+  "author": "bakape",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bakape/livestreamer-mp3/issues"
+  },
+  "homepage": "https://github.com/bakape/livestreamer-mp3",
+  "dependencies": {
+    "async": "^0.9.0",
+    "express": "^4.12.3"
+  }
+}
