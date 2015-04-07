@@ -17,12 +17,16 @@ app.get('/', function(req, resp) {
 		'Expires': 'Thu, 01 Jan 1970 00:00:00 GMT',
 		'Cache-Control': 'no-cache, no-store'
 	});
+	const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	listeners.push(resp);
+	console.log(`info: client ${ip} connected; total: ${listeners.length}`);
 	// Remove listener on client disconnect
 	req.on('close', function() {
 		var index = listeners.indexOf(resp);
-		if (index > -1)
-			listeners.splice(index, 1);
+		if (index === -1)
+			return;
+		listeners.splice(index, 1);
+		console.log(`info: client ${ip} disconnected; total: ${listeners.length}`);
 	});
 });
 
@@ -76,14 +80,10 @@ function checkSource() {
 };
 
 function again(status, name) {
-	if (!livestreamer.ls && status) {
-		console.log(`Channel ${name} live. Starting pipeline.`);
+	if (!livestreamer.ls && status)
 		livestreamer.start(name);
-	}
-	else if (livestreamer.ls && !status) {
-		console.log(`Channel ${name} offline. Killing pipeline.`);
+	else if (livestreamer.ls && !status)
 		livestreamer.kill();
-	}
 	setTimeout(checkSource, 10000);
 }
 
@@ -92,6 +92,7 @@ var Livestreamer = function() {
 };
 
 Livestreamer.prototype.start = function(name) {
+	console.log('info: channel live');
 	this.ls = cp.spawn(bins.livestreamer, [
 		'www.ustream.tv/' + name, 'best',
 		'-O'
@@ -107,7 +108,7 @@ Livestreamer.prototype.start = function(name) {
 	var self = this;
 	// Only consider the stream up after the first pipe buffer
 	this.ffmpeg.stdout.once('data', function() {
-		console.log('Disabling fallback');
+		console.log('info: disabling fallback');
 		self.up = true;
 	})
 	this.ffmpeg.stdout.on('data', function(data) {
@@ -124,6 +125,7 @@ Livestreamer.prototype.kill = function() {
 	this.up = false;
 	if (!this.ls || !this.ffmpeg)
 		return;
+	console.log('info: channel offline');
 	this.ls.kill();
 	this.ffmpeg.kill();
 	this.ls = null;
@@ -141,6 +143,6 @@ async.parallel([
 			throw err;
 		fallback();
 		checkSource();
-		console.log('Server started on port ' + config.port);
+		console.log('info: server started on port ' + config.port);
 	}
 );
