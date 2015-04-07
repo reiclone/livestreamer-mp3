@@ -61,7 +61,6 @@ function fallback() {
 		listeners.forEach(function(resp) {
 			resp.write(data);
 		});
-		console.log(listeners.length);
 	});
 	// Restart the loop stream
 	ffmpeg.stdout.once('close', function() {
