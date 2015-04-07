@@ -1,3 +1,9 @@
 module.exports = {
-	port: 8005
+	port: 8005,
+// Only Ustream for now
+	source: 'ustream',
+// ID of the source channel
+	channel: 17149036,
+// Target MP3 variable quality setting [0-9]:[best-smallest]
+	quality: 5
 };

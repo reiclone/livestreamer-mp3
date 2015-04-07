@@ -22,6 +22,7 @@
   "homepage": "https://github.com/bakape/livestreamer-mp3",
   "dependencies": {
     "async": "^0.9.0",
-    "express": "^4.12.3"
+    "express": "^4.12.3",
+    "request": "^2.55.0"
   }
 }
