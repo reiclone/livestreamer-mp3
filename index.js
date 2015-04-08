@@ -15,7 +15,8 @@ app.get('/', function(req, resp) {
 		'Access-Control-Allow-Origin': '*',
 		"content-type": 'audio/mpeg',
 		'Expires': 'Thu, 01 Jan 1970 00:00:00 GMT',
-		'Cache-Control': 'no-cache, no-store'
+		'Cache-Control': 'no-cache, no-store',
+		'Transfer-Encoding': 'chunked'
 	});
 	const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	listeners.push(resp);
